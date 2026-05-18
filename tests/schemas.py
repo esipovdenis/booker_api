@@ -14,3 +14,25 @@ BOOKING_SCHEMA = {
         },
     },
 }
+
+TASKS_LIST_SCHEMA = {
+    "type": "array",
+    "items": {
+        "type": "object",
+        "properties": {
+            "taskid": {"type": "integer"}
+        },
+        "required": ["taskid"]
+    }
+}
+
+BOOKINGS_LIST_SCHEMA = {
+    "type": "array",
+    "items": {
+        "type": "object",
+        "properties": {
+            "bookingid": {"type": "integer"}
+        },
+        "required": ["bookingid"]
+    }
+}
