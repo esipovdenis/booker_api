@@ -1,0 +1,26 @@
+{
+    "valid_booking": {
+        "firstname": "John",
+        "lastname": "Doe",
+        "totalprice": 100,
+        "depositpaid": true,
+        "bookingdates": {
+            "checkin": "2026-01-01",
+            "checkout": "2026-01-05"
+        }
+    },
+    "updated_booking": {
+        "firstname": "Updated",
+        "lastname": "Doe",
+        "totalprice": 100,
+        "depositpaid": true,
+        "bookingdates": {
+            "checkin": "2026-01-01",
+            "checkout": "2026-01-05"
+        }
+    },
+    "credentials": {
+        "username": "admin",
+        "password": "password123"
+    }
+}
