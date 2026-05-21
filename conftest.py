@@ -3,6 +3,8 @@ import json
 import os
 import allure
 from api_client.auth_api import AuthApi
+import urllib3
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
 
@@ -19,3 +21,4 @@ def auth_token():
         test_data["credentials"]["password"]
     )
     return r.json()["token"]
+
