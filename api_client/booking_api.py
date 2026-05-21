@@ -1,6 +1,10 @@
 import allure
 import requests
+import urllib3
+from jsonschema import validate
 from config import BASE_URL
+
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 
 class BookingApi:
@@ -35,9 +39,29 @@ class BookingApi:
 
     @allure.step("Проверить статус код {expected_code}")
     def check_status_code(self, r, expected_code):
-        assert r.status_code == expected_code
+        assert r.status_code == expected_code, \
+            f"Ожидался статус {expected_code}, получен {r.status_code}"
+
+    @allure.step("Проверить наличие bookingid в ответе")
+    def check_booking_id_exists(self, r):
+        assert "bookingid" in r.json(), \
+            "bookingid отсутствует в ответе"
+
+    @allure.step("Проверить firstname == {expected_firstname}")
+    def check_firstname(self, r, expected_firstname):
+        assert r.json()["firstname"] == expected_firstname, \
+            f"Ожидался firstname {expected_firstname}, получен {r.json()['firstname']}"
+
+    @allure.step("Проверить totalprice == {expected_price}")
+    def check_totalprice(self, r, expected_price):
+        assert r.json()["totalprice"] == expected_price, \
+            f"Ожидался totalprice {expected_price}, получен {r.json()['totalprice']}"
+
+    @allure.step("Проверить lastname == {expected_lastname}")
+    def check_lastname(self, r, expected_lastname):
+        assert r.json()["lastname"] == expected_lastname, \
+            f"Ожидался lastname {expected_lastname}, получен {r.json()['lastname']}"
 
     @allure.step("Валидировать схему ответа")
-    def validate_schema(self, data, schema):
-        from jsonschema import validate
-        validate(instance=data, schema=schema)
+    def validate_schema(self, r, schema):
+        validate(instance=r.json(), schema=schema)

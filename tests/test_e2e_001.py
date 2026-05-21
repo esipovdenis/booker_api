@@ -21,36 +21,37 @@ class TestBooking:
     @allure.title("TC_E2E_001 — Полный цикл бронирования")
     @allure.severity(allure.severity_level.CRITICAL)
     def test_e2e_001(self, auth_token):
-
         # Шаг 1 — токен получен
-        assert auth_token is not None
+        assert auth_token is not None, "Токен авторизации не получен"
 
         # Шаг 2 — создать бронь
         r = booking_api.create_booking(test_data["valid_booking"])
         booking_api.check_status_code(r, 200)
+        booking_api.check_booking_id_exists(r)
         booking_id = r.json()["bookingid"]
 
         # Шаг 3 — получить бронь
         r = booking_api.get_booking(booking_id)
         booking_api.check_status_code(r, 200)
-        assert r.json()["firstname"] == "John"
+        booking_api.check_firstname(r, "John")
 
         # Шаг 4 — валидация схемы
-        booking_api.validate_schema(r.json(), BOOKING_SCHEMA)
+        booking_api.validate_schema(r, BOOKING_SCHEMA)
 
         # Шаг 5 — обновить бронь
         r = booking_api.update_booking(booking_id, test_data["updated_booking"], auth_token)
         booking_api.check_status_code(r, 200)
-        assert r.json()["firstname"] == "Updated"
+        booking_api.check_firstname(r, "Updated")
 
         # Шаг 6 — проверить обновление
         r = booking_api.get_booking(booking_id)
-        assert r.json()["firstname"] == "Updated"
+        booking_api.check_firstname(r, "Updated")
 
         # Шаг 7 — частичное обновление
         r = booking_api.patch_booking(booking_id, {"totalprice": 200}, auth_token)
         booking_api.check_status_code(r, 200)
-        assert r.json()["totalprice"] == 200
+        booking_api.check_totalprice(r, 200)
+        booking_api.check_lastname(r, "Doe")
 
         # Шаг 8 — удалить бронь
         r = booking_api.delete_booking(booking_id, auth_token)
